@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+        
+        <!-- import the uuid for array
+            <script>
+            import uuid from 'https://data.jsdelivr.com/v1/package/npm/vue-uuid/badge)](https://www.jsdelivr.com/package/npm/vue-uuid';
+        </script> -->
+        <link rel="stylesheet" href="game.css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://kit.fontawesome.com/4e714b0be7.js" crossorigin="anonymous"></script>
+	</head>
+	<body>
+	
+	<div id="app">
+        <h2>Forest & Frogs</h2>
+        <div class="Rules">
+            <h4>Rules</h4>
+            1. Two players game<br/>
+            2. Roll the dice to go up and try to reach 100 to win the game<br/>
+            3. Every time a frog bite you, you will go back its depend on how close you are to the 100<br/>
+            4. The difficulty level increase on how close you are to the end.<br/>
+        </div>
+
+        <div class="container" >
+            <!-- board area-->
+            <div class="display">
+                
+                <table>
+                    <tr>
+                        <td class="board" >
+                            <row
+                        v-for="row in row1"
+                        v-bind:r="row.r"
+                        v-bind:key="row.id"
+                        v-bind:id="row.id"
+                        v-bind:p="row.p"
+                        v-bind:dice = "number"
+                        v-bind:dice2 = "number2"
+                        v-bind:sum = "sum"
+                        ></row>
+                        </td>
+                        
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <h5>Turn:
+                    <br/>{{Playerturn}}</h5>
+            </div>
+             <!-- dice for scoreboard-->
+            <div class="pl1">
+                Player 1
+                <button id="value" :disabled="button" class="dice" v-bind:diceNumber="diceNumber" v-on:click="rollDice()" >{{diceNumber}}</button>
+                Roll Dice: {{diceNumber}}<br/>
+                <p>&nbsp;</p>
+                Total Score:{{playerscore()}}
+            </div>
+            <div class="pl2">
+                
+                Player 2
+            <button id="value" :disabled="button2" class="dice" v-bind:diceNumber2="diceNumber2" v-on:click="rollDice2()" >{{diceNumber2}}</button>
+                Roll Dice: {{diceNumber2}}<br/>
+                <p>&nbsp;</p>
+                Total Score:{{player2score()}}
+            </div>
+            
+           
+        </div>
+	</div>
+	
+	<script>
+        
+        Vue.component('row',{
+		props:['r','id','p','dice','dice2'],	
+		template:
+		`<div  
+			v-bind:class=" 'row' "">
+            
+            <i  
+             :class="{'fas fa-otter': (id==9) || (id==15)|| (id==21)|| (id == 32) ||(id==39)||(id==41) || (id==28) || (id==25) 
+            ||(id==85)|| (id==58)||(id==68) ||(id==45) || (id==71) ||(id==65) ||(id==78) ||(id==81) ||(id==92) ||(id==98) ||(id==52)
+            }">
+            <i :class="{'fas fa-street-view' : (id == add() + 1) }">
+            <i :class="{'fas fa-street-view player2' : (id == add2()+1) }">
+            <i :class="{'fas fa-trophy stop' : (id == 100) }">
+            {{ r }}
+            </i>
+            </i>
+            </i>
+            </i>{{ p }}
+		</div>`,
+    
+		methods:{
+            play:function(){
+                console.log(e)
+                console.log('works')
+            },
+            add:function(){
+                var total = 0;
+                for (var i in this.dice){
+                    total += this.dice[i];
+                    if(total=== 8 || total === 14 ||  total === 24 || total === 27 ||total === 20){
+                        this.dice.splice(0,1);
+                    }
+                    else if(total === 38 || total === 31 || total === 40 ||total === 57 || total === 44 || total ===51){
+                        this.dice.splice(0,2);
+                    }
+                    else if(total === 64 || total === 67 || total === 77 || total === 70 || total === 80){
+                        this.dice.splice(0,3)
+                    }
+                    else if(total === 84 || total === 97 || total === 91){
+                        this.dice.splice(0,4);
+                    }
+                    
+                    
+                    //console.log(this.dice);
+                }
+                return total;
+            },
+            add2:function(){
+                var total2 = 0;
+                for (var j in this.dice2){
+                    total2 += this.dice2[j];
+                    if(total2 === 8 || total2 === 14 ||  total2 === 24 || total2 === 27 ||total2 === 20){
+                        this.dice2.splice(0,1);
+                    }
+                    else if(total2 === 38 || total2 === 31 || total2 === 40 ||total2 === 57 || total2 === 44 || total2 ===51){
+                        this.dice2.splice(0,2);
+                    }
+                    else if(total2 === 64 || total2 === 67 || total2 === 77 || total2 === 70 || total2 === 80){
+                        this.dice2.splice(0,3)
+                    }
+                    else if(total2 === 84 || total2 === 97 || total2 === 91){
+                        this.dice2.splice(0.4);
+                    }
+                    //console.log(this.dice2);
+                }
+                return total2;
+            },
+            
+            
+            
+		},data(){
+            return{
+                player:0,
+                score2:[]
+            }
+        },
+        mounted:function(){
+            var score = 0;
+                for(var i in this.score2){
+                    score += this.score2[i];
+                }
+            return score;
+		}
+	});
+    
+        var app = new Vue({
+            el: '#app',
+            data:{	
+                sum:0,
+                diceNumber:0,
+                diceNumber2:0,
+                number:[],
+                number2:[],
+                button:false,
+                button2:true,
+                Playerturn:"Player1",
+                row1:
+                [        
+                    {id:100, r:'',p:''},
+                    {id:99, r:99,p:''},
+                    {id:98, r:98,p:''},
+                    {id:97, r:97,p:''},
+                    {id:96, r:96,p:''},
+                    {id:95, r:95,p:''},
+                    {id:94, r:94,p:''},
+                    {id:93, r:93,p:''},
+                    {id:92, r:92,p:''},
+                    {id:91, r:91,p:''},
+                    
+                    {id:81, r:81,p:''},
+                    {id:82, r:82,p:''},
+                    {id:83, r:83,p:''},
+                    {id:84, r:84,p:''},
+                    {id:85, r:85,p:''},
+                    {id:86, r:86,p:''},
+                    {id:87, r:87,p:''},
+                    {id:88, r:88,p:''},
+                    {id:89, r:89,p:''},
+                    {id:90, r:90,p:''},
+
+                    {id:80, r:80,p:''},
+                    {id:79, r:79,p:''},
+                    {id:78, r:78,p:''},
+                    {id:77, r:77,p:''},
+                    {id:76, r:76,p:''},
+                    {id:75, r:75,p:''},
+                    {id:74, r:74,p:''},
+                    {id:73, r:73,p:''},
+                    {id:72, r:72,p:''},
+                    {id:71, r:71,p:''},
+
+                    {id:61, r:61,p:''},
+                    {id:62, r:62,p:''},
+                    {id:63, r:63,p:''},
+                    {id:64, r:64,p:''},
+                    {id:65, r:65,p:''},
+                    {id:66, r:66,p:''},
+                    {id:67, r:67,p:''},
+                    {id:68, r:68,p:''},
+                    {id:69, r:69,p:''},
+                    {id:70, r:70,p:''},
+                    
+                    {id:60, r:60,p:''},
+                    {id:59, r:59,p:''},
+                    {id:58, r:58,p:''},
+                    {id:57, r:57,p:''},
+                    {id:56, r:56,p:''},
+                    {id:55, r:55,p:''},
+                    {id:54, r:54,p:''},
+                    {id:53, r:53,p:''},
+                    {id:52, r:52,p:''},
+                    {id:51, r:51,p:''},
+
+                    {id:41, r:41,p:''},
+                    {id:42, r:42,p:''},
+                    {id:43, r:43,p:''},
+                    {id:44, r:44,p:''},
+                    {id:45, r:45,p:''},
+                    {id:46, r:46,p:''},
+                    {id:47, r:47,p:''},
+                    {id:48, r:48,p:''},
+                    {id:49, r:49,p:''},
+                    {id:50, r:50,p:''},
+
+                    {id:40, r:40,p:''},
+                    {id:39, r:39,p:''},
+                    {id:38, r:38,p:''},
+                    {id:37, r:37,p:''},
+                    {id:36, r:36,p:''},
+                    {id:35, r:35,p:''},
+                    {id:34, r:34,p:''},
+                    {id:33, r:33,p:''},
+                    {id:32, r:32,p:''},
+                    {id:31, r:31,p:''},
+
+                    {id:21, r:21,p:''},
+                    {id:22, r:22,p:''},
+                    {id:23, r:23,p:''},
+                    {id:24, r:24,p:''},
+                    {id:25, r:25,p:''},
+                    {id:26, r:26,p:''},
+                    {id:27, r:27,p:''},
+                    {id:28, r:28,p:''},
+                    {id:29, r:29,p:''},
+                    {id:30, r:30,p:''},
+                    
+                    {id:20, r:20,p:''},
+                    {id:19, r:19,p:''},
+                    {id:18, r:18,p:''},
+                    {id:17, r:17,p:''},
+                    {id:16, r:16,p:''},
+                    {id:15, r:15,p:''},
+                    {id:14, r:14,p:''},
+                    {id:13, r:13,p:''},
+                    {id:12, r:12,p:''},
+                    {id:11, r:11,p:''},
+
+                    {id:1, r:1,p:''},
+                    {id:2, r:2,p:''},
+                    {id:3, r:3,p:''},
+                    {id:4, r:4,p:''},
+                    {id:5, r:5,p:''},
+                    {id:6, r:6,p:''},
+                    {id:7, r:7,p:''},
+                    {id:8, r:8,p:''},
+                    {id:9, r:9,p:''},
+                    {id:10, r:10,p:''},
+                    
+
+                ],
+            },
+            methods:{
+                rollDice:function(){
+                    this.diceNumber = Math.floor(Math.random()*6)+1;
+                    var value = this.diceNumber;
+                    this.number.push(this.diceNumber);
+                    this.button2=false;
+                    this.button=true;
+                    this.Playerturn = "Player2";
+                
+                },
+                rollDice2:function(){
+                    this.diceNumber2 = Math.floor(Math.random()*6)+1;
+                    var value = this.diceNumber2;
+                    this.number2.push(this.diceNumber2);
+                    this.button=false;
+                    this.button2=true;
+                    this.Playerturn = "Player1";
+                
+                },
+                playerscore:function(){
+                    var score =0;
+                    for(var i in this.number){
+                        score += this.number[i];
+                    }
+                    return score;
+                } ,
+                player2score:function(){
+                    var score2 =0;
+                    for(var i in this.number2){
+                        score2 += this.number2[i];
+                    }
+                    return score2;
+                }           
+            },
+            mounted:function(){
+               
+            }
+        });    
+        
+    </script>
+	</body>
+</html>
